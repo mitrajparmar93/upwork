@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 import json
-from pprint import pprint as print
-import csv
 import glob
+from pymethods.jsontocsv import jsonlisttocsv
 
 
 def main():
@@ -13,7 +12,7 @@ def main():
     for json_file in file_list:
 
         with open(json_file, 'r', encoding='utf-8') as jf:
-            json_data = json.load(fp=jf)                
+            json_data = json.load(fp=jf)
 
         for data in json_data['included']:
             result = {}
@@ -21,7 +20,8 @@ def main():
 
             if 'attributes' in data_keys:
                 attribute_keys = data['attributes'].keys()
-                required_attrs = ['first-name', 'last-name', 'company-title', 'company-name', 'website']
+                required_attrs = ['first-name', 'last-name',
+                                  'company-title', 'company-name', 'website']
 
                 for attr in required_attrs:
 
@@ -36,14 +36,12 @@ def main():
     print(final_result)
 
     csv_file = "json-to-csv/csvfile.csv"
-    try:
-        with open(csv_file, 'w') as csv_file:
-            writer = csv.DictWriter(csv_file, fieldnames=['first-name', 'last-name', 'company-title', 'company-name', 'website'])
-            writer.writeheader()
-            for data in final_result:
-                writer.writerow(data)
-    except IOError:
-        print("I/O error")
+    jsonlisttocsv(
+        csv_file=csv_file,
+        field_names=required_attrs,
+        json_data=final_result
+    )
+
 
 if __name__ == '__main__':
     main()
