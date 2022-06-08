@@ -27,13 +27,10 @@ def main():
 
                     if attr in attribute_keys:
                         result[attr] = data['attributes'][attr]
-                    # else:
-                    #     result[attr] = 'NONE'
 
                 if result:
+                    # append only if dict has data
                     final_result.append(result)
-
-    print(final_result)
 
     csv_file = "json-to-csv/csvfile.csv"
     jsonlisttocsv(
